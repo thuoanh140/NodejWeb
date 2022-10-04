@@ -1,0 +1,79 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff</title>
+</head>
+
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    .btn-Sua {
+        outline: none;
+        border: none;
+        background: orange;
+        height: 25px;
+        width: 60px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+
+    .btn-Xoa {
+        outline: none;
+        border: none;
+        background: #fd4d08;
+        height: 25px;
+        width: 60px;
+        border-radius: 3px;
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <table style="width:100%">
+        <tr>
+            <td>Tên nhân viên</td>
+            <td>Ngày sinh</td>
+            <td>Giới tính</td>
+            <td>Email</td>
+            <td>SĐT</td>
+            <td>Địa chỉ</td>
+            <td>Hành động</td>
+        </tr>
+
+        <% for(let i=0; i< dataTable.length; i++) { %>
+            <tr>
+                <td>
+                    <%= dataTable[i].ten_nv %>
+                </td>
+                <td>
+                    <%= dataTable[i].ngay_sinh %>
+                </td>
+                <td>
+                    <%= dataTable[i].gioi_tinh %>
+                </td>
+                <td>
+                    <%= dataTable[i].email %>
+                </td>
+                <td>
+                    <%= dataTable[i].sdt %>
+                </td>
+                <td>
+                    <%= dataTable[i].dia_chi %>
+                </td>
+                <td>
+                    <a href="/edit-staff?id=<%= dataTable[i].id %>" class="btn-Sua" type="button">Sửa</a>
+                    <a href="/delete-staff?id=<%= dataTable[i].id %>" class="btn-Xoa" type="button">Xóa</a>
+                </td>
+            </tr>
+            <% } %>
+    </table>
+</body>
+
+</html>
