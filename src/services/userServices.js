@@ -164,6 +164,47 @@ let CreateNewMovie = (data) => {
     })
 }
 
+let CreateNewFood = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.thuc_an.create({
+                ten_ta: data.ten_ta,
+                gia: data.gia,
+                so_luong: data.so_luong,
+                ghi_chu: data.ghi_chu,
+                anh: data.anh
+
+            })
+            resolve({
+                errCode: 0,
+                message: 'OK'
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let CreateNewEvent = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.khuyen_mai.create({
+                ten_km: data.ten_km,
+                thoi_gian_kt: data.thoi_gian_kt,
+                giam_gia_hd: data.giam_gia_hd,
+                anh_event: data.anh_event
+
+            })
+            resolve({
+                errCode: 0,
+                message: 'OK'
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let deleteStaff = (staffId) => {
     return new Promise(async (resolve, reject) => {
         let user = await db.Nhan_Vien.findOne({
@@ -225,6 +266,43 @@ let updateStaff = (data) => {
         }
     })
 }
+
+let cancelTicket = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Thiếu các tham số bắt buộc!'
+                })
+            }
+            let ticketCancel = await db.ve_ban.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (ticketCancel) {
+                ticketCancel.trang_thai_ve = false;
+                await ticketCancel.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Cập nhật thành công'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy vé!'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
 
 let getMovieService = (inputId) => {
     return new Promise(async (resolve, reject) => {
@@ -322,4 +400,7 @@ module.exports = {
     // getCastService: getCastService,
     // getDirectorService: getDirectorService,
     CreateNewMovie: CreateNewMovie,
+    CreateNewEvent: CreateNewEvent,
+    CreateNewFood: CreateNewFood,
+    cancelTicket: cancelTicket
 }

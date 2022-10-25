@@ -11,14 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // Tai_Khoan.hasOne(models.thanh_vien, {
+      //   foreignKey: 'id_tk'
+      // });
     }
   }
   Tai_Khoan.init({
     ten_tk: DataTypes.STRING,
     mat_khau: DataTypes.STRING,
     id_nv: DataTypes.INTEGER,
-    id_tv: DataTypes.INTEGER,
-    id_vt: DataTypes.INTEGER
+    id_tv: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Tai_Khoan',

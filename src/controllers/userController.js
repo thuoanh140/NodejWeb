@@ -56,9 +56,25 @@ let handleCreateNewMovie = async (req, res) => {
     return res.status(200).json(message);
 }
 
+let handleCreateNewFood = async (req, res) => {
+    let message = await userServices.CreateNewFood(req.body);
+    return res.status(200).json(message);
+}
+
+let handleCreateNewEvent = async (req, res) => {
+    let message = await userServices.CreateNewEvent(req.body);
+    return res.status(200).json(message);
+}
+
 let handleEditStaff = async (req, res) => {
     let data = req.body;
     let message = await userServices.updateStaff(data);
+    return res.status(200).json(message)
+}
+
+let handleCancelTicket = async (req, res) => {
+    // let data = req.body.id;
+    let message = await userServices.cancelTicket(req.query.id);
     return res.status(200).json(message)
 }
 
@@ -149,5 +165,9 @@ module.exports = {
     // getNation: getNation,
     // getDirector: getDirector,
     // getCast: getCast,
-    handleCreateNewMovie: handleCreateNewMovie
+    handleCreateNewMovie: handleCreateNewMovie,
+    handleCreateNewEvent: handleCreateNewEvent,
+    handleCreateNewFood: handleCreateNewFood,
+    handleCancelTicket: handleCancelTicket
+
 }

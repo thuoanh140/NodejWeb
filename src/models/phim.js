@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Phim.belongsToMany(models.The_Loai_Phim, { through: 'Phim_The_Loai_Phim' });
+      Phim.belongsToMany(models.The_Loai_Phim, { through: 'Phim_The_Loai_Phim' }),
+        Phim.hasMany(models.suat_chieu_phim, { foreignKey: 'movieId', as: 'movieData' })
+
     }
   }
   Phim.init({

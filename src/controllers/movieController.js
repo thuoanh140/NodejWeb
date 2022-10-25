@@ -16,6 +16,21 @@ let getMovieNowShowing = async (req, res) => {
     }
 }
 
+let getEvent = async (req, res) => {
+    let limit = req.query.limit;
+    if (!limit) limit = 10;
+    try {
+        let response = await movieService.getEventService(+limit);
+        return res.status(200).json(response);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            message: 'Lỗi từ server'
+        })
+    }
+}
+
 let handleGetMovieDetail = async (req, res) => {
     try {
         let data = await movieService.getMovieNowShowingById(req.query.ten_phim);
@@ -74,6 +89,32 @@ let getTheater = async (req, res) => {
     }
 }
 
+let getFood = async (req, res) => {
+    try {
+        let data = await movieService.getFoodService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin thuc an: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getPaymentMethods = async (req, res) => {
+    try {
+        let data = await movieService.getPaymentMethodsService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin PTTT: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getCinemaRoom = async (req, res) => {
     try {
         let data = await movieService.getCinemaRoomService();
@@ -87,6 +128,203 @@ let getCinemaRoom = async (req, res) => {
     }
 }
 
+let getShowtime = async (req, res) => {
+    try {
+        let data = await movieService.getShowtimeService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin suat chieu: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getMovieFormat = async (req, res) => {
+    try {
+        let data = await movieService.getMovieFormatService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin dinh dang chieu: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getMovieFormatById = async (req, res) => {
+    try {
+        let data = await movieService.getMovieFormatByIdService(req.query.movieId, req.query.provinceId, req.query.date);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin dinh dang chieu: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getTheaterById = async (req, res) => {
+    try {
+        let data = await movieService.getTheaterByIdService(req.query.id);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin rap: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getMovieById = async (req, res) => {
+    try {
+        let data = await movieService.getMovieByIdService(req.query.id);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin phim: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getTicketByIdTV = async (req, res) => {
+    try {
+        let data = await movieService.getTicketByIdTVService(req.query.id_tv);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin phim: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getDetailTicketByIdTicket = async (req, res) => {
+    try {
+        let data = await movieService.getDetailTicketByIdTicketService(req.query.id);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin phim: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+
+let getPaymentById = async (req, res) => {
+    try {
+        let data = await movieService.getPaymentByIdService(req.query.id);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin PTTT: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getEmailById = async (req, res) => {
+    try {
+        let data = await movieService.getEmailByIdService(req.query.id);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin email: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let createTicket = async (req, res) => {
+    let message = await movieService.CreateNewTicket(req.body);
+    return res.status(200).json(message);
+}
+
+let createBillFood = async (req, res) => {
+    let message = await movieService.CreateNewBillFood(req.body);
+    return res.status(200).json(message);
+}
+
+let createDetailTicket = async (req, res) => {
+    let message = await movieService.CreateNewDetailTicket(req.body);
+    return res.status(200).json(message);
+}
+
+let getSeatByCinemaRoomId = async (req, res) => {
+    try {
+        let data = await movieService.getSeatByCinemaRoomIdService(req.query.id_phong_chieu);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin ghe: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getSeatByCinemaRoomIdVIP = async (req, res) => {
+    try {
+        let data = await movieService.getSeatByCinemaRoomIdServiceVIP(req.query.id_phong_chieu);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin ghe: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let createShowtimeDetail = async (req, res) => {
+    try {
+        let infor = await movieService.createShowtimeDetailService(req.body);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+// let getShowtimeByDate = async (req, res) => {
+//     try {
+//         let infor = await movieService.getShowtimeByDateService(req.query.movieId, req.query.provinceId, req.query.date);
+//         return res.status(200).json(infor)
+//     } catch (e) {
+//         console.log(e);
+//         return res.status(200).json({
+//             errCode: -1,
+//             errMessage: 'Error from server'
+//         })
+//     }
+// }
+
+let getShowtimeByDate = async (req, res) => {
+    try {
+        let infor = await movieService.getShowtimeByDateService(req.query.movieId, req.query.provinceId, req.query.date);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
 
 
 module.exports = {
@@ -95,5 +333,24 @@ module.exports = {
     handleGetMovieDetail: handleGetMovieDetail,
     getProvince: getProvince,
     getTheater: getTheater,
-    getCinemaRoom: getCinemaRoom
+    getCinemaRoom: getCinemaRoom,
+    getShowtime: getShowtime,
+    getMovieFormat: getMovieFormat,
+    createShowtimeDetail: createShowtimeDetail,
+    getShowtimeByDate: getShowtimeByDate,
+    getMovieFormatById: getMovieFormatById,
+    getTheaterById: getTheaterById,
+    getSeatByCinemaRoomId: getSeatByCinemaRoomId,
+    getSeatByCinemaRoomIdVIP: getSeatByCinemaRoomIdVIP,
+    getEvent: getEvent,
+    getPaymentMethods: getPaymentMethods,
+    getMovieById: getMovieById,
+    createTicket: createTicket,
+    createDetailTicket: createDetailTicket,
+    getEmailById: getEmailById,
+    getFood: getFood,
+    getPaymentById: getPaymentById,
+    createBillFood: createBillFood,
+    getTicketByIdTV: getTicketByIdTV,
+    getDetailTicketByIdTicket: getDetailTicketByIdTicket
 }

@@ -29,8 +29,8 @@ let createNewAccount = async (dataAccount) => {
             await db.Tai_Khoan.create({
                 ten_tk: dataAccount.ten_tk,
                 mat_khau: hashPasswordFromBcrypt,
-                id_nv: '11',
-                id_vt: '1'
+                id_tv: '1',
+
             })
             console.log(dataAccount)
             console.log(hashPasswordFromBcrypt)
