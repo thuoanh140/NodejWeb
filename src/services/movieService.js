@@ -748,6 +748,39 @@ let getMovieByIdService = (movieId) => {
     })
 }
 
+let getMemberByIdTKService = (idTK) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!idTK) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let data = await db.thanh_vien.findOne({
+                    where: { id_tk: idTK },
+                    include: [
+                        { model: db.loai_thanhvien, as: 'loai_tv', attributes: ['ten_loai_tv'] },
+
+                    ],
+                    raw: false,
+                    nest: true
+                    // raw: false
+                })
+
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let getTicketByIdTVService = (id_tv) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1103,5 +1136,6 @@ module.exports = {
     CreateNewBillFood: CreateNewBillFood,
     getTicketByIdTVService: getTicketByIdTVService,
     getDetailTicketByIdTicketService: getDetailTicketByIdTicketService,
-    createPayment: createPayment
+    createPayment: createPayment,
+    getMemberByIdTKService: getMemberByIdTKService
 }

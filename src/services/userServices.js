@@ -284,6 +284,7 @@ let cancelTicket = (id) => {
             if (ticketCancel) {
                 ticketCancel.trang_thai_ve = false;
                 await ticketCancel.save();
+
                 resolve({
                     errCode: 0,
                     message: 'Cập nhật thành công'

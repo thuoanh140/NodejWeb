@@ -49,6 +49,7 @@ let initWebRoutes = (app) => {
     router.get('/api/get-movie-format-by-Id', movieController.getMovieFormatById);
     router.get('/api/get-theater-by-Id', movieController.getTheaterById);
     router.get('/api/get-movie-by-Id', movieController.getMovieById);
+    router.get('/api/get-member-by-IdTK', movieController.getMemberByIdTK);
     router.get('/api/get-Ticket-by-IdTV', movieController.getTicketByIdTV);
     router.get('/api/get-DetailTicket-by-IdTicket', movieController.getDetailTicketByIdTicket);
     router.get('/api/get-payment-by-Id', movieController.getPaymentById);
