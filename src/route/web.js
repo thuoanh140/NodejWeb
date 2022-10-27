@@ -34,6 +34,7 @@ let initWebRoutes = (app) => {
     router.post('/api/create-new-movie', userController.handleCreateNewMovie);
     router.post('/api/create-new-food', userController.handleCreateNewFood);
     router.post('/api/create-new-event', userController.handleCreateNewEvent);
+    router.post('/api/create-new-rating', userController.handleCreateNewRating);
     router.post('/create_payment_url', movieService.createPayment);
 
     // router.get('/api/now-showing', movieController.getMovieNowShowing);

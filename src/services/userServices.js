@@ -205,6 +205,27 @@ let CreateNewEvent = (data) => {
     })
 }
 
+let CreateNewRating = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.danh_gia.create({
+                id_tv: data.id_tv,
+                diem_dg: data.diem_dg,
+                noi_dung: data.noi_dung,
+                ngay_dg: data.ngay_dg,
+                id_phim: data.id_phim
+
+            })
+            resolve({
+                errCode: 0,
+                message: 'OK'
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let deleteStaff = (staffId) => {
     return new Promise(async (resolve, reject) => {
         let user = await db.Nhan_Vien.findOne({
@@ -403,5 +424,6 @@ module.exports = {
     CreateNewMovie: CreateNewMovie,
     CreateNewEvent: CreateNewEvent,
     CreateNewFood: CreateNewFood,
-    cancelTicket: cancelTicket
+    cancelTicket: cancelTicket,
+    CreateNewRating: CreateNewRating
 }

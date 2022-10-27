@@ -66,6 +66,11 @@ let handleCreateNewEvent = async (req, res) => {
     return res.status(200).json(message);
 }
 
+let handleCreateNewRating = async (req, res) => {
+    let message = await userServices.CreateNewRating(req.body);
+    return res.status(200).json(message);
+}
+
 let handleEditStaff = async (req, res) => {
     let data = req.body;
     let message = await userServices.updateStaff(data);
@@ -168,6 +173,7 @@ module.exports = {
     handleCreateNewMovie: handleCreateNewMovie,
     handleCreateNewEvent: handleCreateNewEvent,
     handleCreateNewFood: handleCreateNewFood,
-    handleCancelTicket: handleCancelTicket
+    handleCancelTicket: handleCancelTicket,
+    handleCreateNewRating: handleCreateNewRating
 
 }
