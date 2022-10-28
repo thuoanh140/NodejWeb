@@ -246,6 +246,19 @@ let getPaymentById = async (req, res) => {
     }
 }
 
+let getRatingByIdMovie = async (req, res) => {
+    try {
+        let data = await movieService.getRatingByIdMovieService(req.query.id_phim);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin danh gia: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getEmailById = async (req, res) => {
     try {
         let data = await movieService.getEmailByIdService(req.query.id);
@@ -366,5 +379,6 @@ module.exports = {
     createBillFood: createBillFood,
     getTicketByIdTV: getTicketByIdTV,
     getDetailTicketByIdTicket: getDetailTicketByIdTicket,
-    getMemberByIdTK: getMemberByIdTK
+    getMemberByIdTK: getMemberByIdTK,
+    getRatingByIdMovie: getRatingByIdMovie
 }

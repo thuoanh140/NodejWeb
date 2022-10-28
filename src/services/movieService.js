@@ -900,6 +900,41 @@ let getPaymentByIdService = (paymentId) => {
     })
 }
 
+let getRatingByIdMovieService = (movieId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!movieId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let data = await db.danh_gia.findAll({
+                    where: { id_phim: movieId },
+                    include: [
+                        { model: db.thanh_vien, as: 'memberData', attributes: ['ten_tv'] },
+
+                    ],
+                    order: [
+                        ['id', 'DESC']],
+                    raw: false,
+                    nest: true
+                    // raw: false
+                })
+
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 
 let getEmailByIdService = (inputId) => {
     return new Promise(async (resolve, reject) => {
@@ -1137,5 +1172,6 @@ module.exports = {
     getTicketByIdTVService: getTicketByIdTVService,
     getDetailTicketByIdTicketService: getDetailTicketByIdTicketService,
     createPayment: createPayment,
-    getMemberByIdTKService: getMemberByIdTKService
+    getMemberByIdTKService: getMemberByIdTKService,
+    getRatingByIdMovieService: getRatingByIdMovieService
 }
