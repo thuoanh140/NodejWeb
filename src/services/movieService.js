@@ -829,6 +829,34 @@ let getTicketByIdTVService = (id_tv) => {
     })
 }
 
+let getIdSeatByIdShowtimeService = (idShowtime) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!idShowtime) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let data = await db.ct_hd_ve.findAll({
+                    where: {
+                        id_suat_chieu: idShowtime
+                    }
+                })
+
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let getDetailTicketByIdTicketService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1173,5 +1201,6 @@ module.exports = {
     getDetailTicketByIdTicketService: getDetailTicketByIdTicketService,
     createPayment: createPayment,
     getMemberByIdTKService: getMemberByIdTKService,
-    getRatingByIdMovieService: getRatingByIdMovieService
+    getRatingByIdMovieService: getRatingByIdMovieService,
+    getIdSeatByIdShowtimeService: getIdSeatByIdShowtimeService
 }

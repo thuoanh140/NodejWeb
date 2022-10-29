@@ -219,6 +219,19 @@ let getTicketByIdTV = async (req, res) => {
     }
 }
 
+let getIdSeatByIdShowtime = async (req, res) => {
+    try {
+        let data = await movieService.getIdSeatByIdShowtimeService(req.query.id_suat_chieu);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin id_ghe: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getDetailTicketByIdTicket = async (req, res) => {
     try {
         let data = await movieService.getDetailTicketByIdTicketService(req.query.id);
@@ -380,5 +393,6 @@ module.exports = {
     getTicketByIdTV: getTicketByIdTV,
     getDetailTicketByIdTicket: getDetailTicketByIdTicket,
     getMemberByIdTK: getMemberByIdTK,
-    getRatingByIdMovie: getRatingByIdMovie
+    getRatingByIdMovie: getRatingByIdMovie,
+    getIdSeatByIdShowtime: getIdSeatByIdShowtime
 }
