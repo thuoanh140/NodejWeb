@@ -634,7 +634,7 @@ let getSeatByCinemaRoomIdService = (cinemaRoomId) => {
                 let data = await db.ghe.findAll({
                     where: {
                         id_phong_chieu: cinemaRoomId,
-                        id_loai_ghe: '1'
+                        // id_loai_ghe: '1'
                     },
                     include: [
                         { model: db.loai_ghe, as: 'seatTypeData', attributes: ['ten_loai_ghe', 'gia_tien'] },

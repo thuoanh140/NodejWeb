@@ -107,6 +107,19 @@ let getMovie = async (req, res) => {
     }
 }
 
+let getAllTicket = async (req, res) => {
+    try {
+        let data = await userServices.getAllTicketService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin ve: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getGenre = async (req, res) => {
     try {
         let data = await userServices.getGenreService();
@@ -174,6 +187,7 @@ module.exports = {
     handleCreateNewEvent: handleCreateNewEvent,
     handleCreateNewFood: handleCreateNewFood,
     handleCancelTicket: handleCancelTicket,
-    handleCreateNewRating: handleCreateNewRating
+    handleCreateNewRating: handleCreateNewRating,
+    getAllTicket: getAllTicket
 
 }

@@ -366,6 +366,27 @@ let getGenreService = () => {
     })
 }
 
+let getAllTicketService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let res = {};
+            let ticket = await db.ct_hd_ve.findAll({
+                include: [
+                    { model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'] },
+
+                ],
+                raw: false,
+                nest: true
+            });
+            res.errCode = 0;
+            res.data = ticket;
+            resolve(res)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 // let getNationService = () => {
 //     return new Promise(async (resolve, reject) => {
 //         try {
@@ -425,5 +446,6 @@ module.exports = {
     CreateNewEvent: CreateNewEvent,
     CreateNewFood: CreateNewFood,
     cancelTicket: cancelTicket,
-    CreateNewRating: CreateNewRating
+    CreateNewRating: CreateNewRating,
+    getAllTicketService: getAllTicketService
 }

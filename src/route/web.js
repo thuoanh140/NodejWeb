@@ -24,6 +24,7 @@ let initWebRoutes = (app) => {
     router.delete('/api/delete-staff', userController.handleDeleteStaff);
 
     router.get('/api/get-movie', userController.getMovie);
+    router.get('/api/get-all-ticket', userController.getAllTicket);
     router.get('/api/get-genre', userController.getGenre);
     router.get('/api/get-province', movieController.getProvince);
     router.get('/api/get-showtime', movieController.getShowtime);
