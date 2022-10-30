@@ -20,11 +20,14 @@ let initWebRoutes = (app) => {
     router.get('/api/get-all-staff', userController.handleGetAllStaff);
     router.post('/api/create-new-staff', userController.handleCreateNewStaff);
     router.put('/api/edit-staff', userController.handleEditStaff);
+    // router.put('/api/edit-ticket', userController.handleEditS);
     router.put('/api/cancel-ticket', userController.handleCancelTicket);
     router.delete('/api/delete-staff', userController.handleDeleteStaff);
+    router.delete('/api/delete-ticket', userController.handleDeleteTicket);
 
     router.get('/api/get-movie', userController.getMovie);
     router.get('/api/get-all-ticket', userController.getAllTicket);
+    router.get('/api/search-ticket', userController.searchTicket);
     router.get('/api/get-genre', userController.getGenre);
     router.get('/api/get-province', movieController.getProvince);
     router.get('/api/get-showtime', movieController.getShowtime);

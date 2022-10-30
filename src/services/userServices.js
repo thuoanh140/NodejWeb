@@ -249,6 +249,29 @@ let deleteStaff = (staffId) => {
     })
 }
 
+let deleteTicket = (ticketId) => {
+    return new Promise(async (resolve, reject) => {
+        let ticket = await db.ct_hd_ve.findOne({
+            where: { id: ticketId }
+        })
+
+        if (!ticket) {
+            resolve({
+                errCode: 2,
+                errMessage: 'Ve không tồn tại!'
+            })
+        }
+
+        await db.ct_hd_ve.destroy({
+            where: { id: ticketId }
+        })
+        resolve({
+            errCode: 0,
+            Message: 'Xóa thành công'
+        })
+    })
+}
+
 
 let updateStaff = (data) => {
     return new Promise(async (resolve, reject) => {
@@ -372,7 +395,35 @@ let getAllTicketService = () => {
             let res = {};
             let ticket = await db.ct_hd_ve.findAll({
                 include: [
-                    { model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'] },
+
+                    {
+                        model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'],
+                        include:
+                            [
+                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
+                            ]
+                    },
+                    {
+                        model: db.ghe, as: 'seatId', attributes: ['ten_ghe'],
+                        include: [
+                            {
+                                model: db.phong_chieu, as: 'cinemaRoomData', attributes: ['so_phong'],
+                                include: [
+                                    { model: db.rap, as: 'rapData', attributes: ['ten_rap'] }
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['movieId', 'showTime'],
+
+                        include: [
+                            { model: db.Phim, as: 'movieData', attributes: ['ten_phim'] }
+                        ]
+                    },
+
+
+
 
                 ],
                 raw: false,
@@ -386,6 +437,59 @@ let getAllTicketService = () => {
         }
     })
 }
+
+let searchTicketService = (condition) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let res = {};
+            let ticket = await db.ct_hd_ve.findAll({
+                where: condition
+                ,
+                include: [
+
+                    {
+                        model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'],
+                        include:
+                            [
+                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
+                            ]
+                    },
+                    {
+                        model: db.ghe, as: 'seatId', attributes: ['ten_ghe'],
+                        include: [
+                            {
+                                model: db.phong_chieu, as: 'cinemaRoomData', attributes: ['so_phong'],
+                                include: [
+                                    { model: db.rap, as: 'rapData', attributes: ['ten_rap'] }
+                                ]
+                            },
+                        ]
+                    },
+                    {
+                        model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['movieId', 'showTime'],
+
+                        include: [
+                            { model: db.Phim, as: 'movieData', attributes: ['ten_phim'] }
+                        ]
+                    },
+
+
+
+
+                ],
+                raw: false,
+                nest: true
+            });
+            res.errCode = 0;
+            res.data = ticket;
+            resolve(res)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
 
 // let getNationService = () => {
 //     return new Promise(async (resolve, reject) => {
@@ -447,5 +551,7 @@ module.exports = {
     CreateNewFood: CreateNewFood,
     cancelTicket: cancelTicket,
     CreateNewRating: CreateNewRating,
-    getAllTicketService: getAllTicketService
+    getAllTicketService: getAllTicketService,
+    deleteTicket: deleteTicket,
+    searchTicketService: searchTicketService
 }

@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      ve_ban.hasMany(models.ct_hd_ve, { foreignKey: 'id', as: 'ticketData' })
+      ve_ban.hasMany(models.ct_hd_ve, { foreignKey: 'id', as: 'ticketData' }),
+        ve_ban.belongsTo(models.pt_thanhtoan, { foreignKey: 'id_pttt', targetKey: 'id', as: 'paymentData' })
     }
   }
   ve_ban.init({

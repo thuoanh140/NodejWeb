@@ -94,6 +94,17 @@ let handleDeleteStaff = async (req, res) => {
     return res.status(200).json(message)
 }
 
+let handleDeleteTicket = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'Thiếu các thông số bắt buộc!'
+        })
+    }
+    let message = await userServices.deleteTicket(req.body.id);
+    return res.status(200).json(message)
+}
+
 let getMovie = async (req, res) => {
     try {
         let data = await userServices.getMovieService(req.query.id);
@@ -110,6 +121,19 @@ let getMovie = async (req, res) => {
 let getAllTicket = async (req, res) => {
     try {
         let data = await userServices.getAllTicketService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin ve: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let searchTicket = async (req, res) => {
+    try {
+        let data = await userServices.searchTicketService(req.query);
         return res.status(200).json(data);
     } catch (e) {
         console.log('Có lỗi khi lấy thông tin ve: ', e);
@@ -188,6 +212,8 @@ module.exports = {
     handleCreateNewFood: handleCreateNewFood,
     handleCancelTicket: handleCancelTicket,
     handleCreateNewRating: handleCreateNewRating,
-    getAllTicket: getAllTicket
+    getAllTicket: getAllTicket,
+    handleDeleteTicket: handleDeleteTicket,
+    searchTicket: searchTicket
 
 }
