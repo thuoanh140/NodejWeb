@@ -524,7 +524,7 @@ let getAllTicketService = () => {
     })
 }
 
-let handleGetTicketLimitService = (limit, page) => {
+let handleGetTicketLimitService = (limit = 20, page = 1) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!limit || !page) {
@@ -536,11 +536,10 @@ let handleGetTicketLimitService = (limit, page) => {
                 let res = {};
                 let ticket = await db.ct_hd_ve.findAndCountAll({
                     order: [["id", "DESC"]],
-                    offset: parseInt(limit - 1) * page,
+                    offset: parseInt(page - 1) * limit,
                     limit: parseInt(limit),
                     // order: [["id", "DESC"]],
                     include: [
-
                         {
                             model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'],
                             include:
