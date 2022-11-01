@@ -1,6 +1,9 @@
 import db from "../models/index"
 import bcrypt from 'bcryptjs';
 
+
+const salt = bcrypt.genSaltSync(10);
+
 let handleUserLogin = (ten_tk, mat_khau) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -226,6 +229,49 @@ let CreateNewRating = (data) => {
     })
 }
 
+let hashUserPassword = (mat_khau) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let hashPassword = await bcrypt.hashSync(mat_khau, salt);
+            resolve(hashPassword)
+        } catch (e) {
+            reject(e)
+        }
+
+
+    })
+}
+
+let RegisterNow = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.thanh_vien.create({
+                id_loai_tv: 1,
+                ten_tv: data.ten_tv,
+                ngay_sinh: data.ngay_sinh,
+                email: data.email,
+                sdt: data.sdt,
+                gioi_tinh: data.gioi_tinh
+
+            }).then(async result => {
+                let hashPasswordFromBcrypt = await hashUserPassword(data.mat_khau)
+                await db.Tai_Khoan.create({
+                    ten_tk: data.ten_tk,
+                    mat_khau: hashPasswordFromBcrypt,
+                    role_id: 3,
+                    id_tv: result.id
+                })
+            })
+            resolve({
+                errCode: 0,
+                message: 'OK'
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let deleteStaff = (staffId) => {
     return new Promise(async (resolve, reject) => {
         let user = await db.Nhan_Vien.findOne({
@@ -293,6 +339,45 @@ let updateStaff = (data) => {
                 staff.gioi_tinh = data.gioi_tinh;
 
                 await staff.save();
+                resolve({
+                    errCode: 0,
+                    message: 'Cập nhật thành công'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy người dùng!'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let updateMember = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Thiếu các tham số bắt buộc!'
+                })
+            }
+            let member = await db.thanh_vien.findOne({
+                where: { id: data.id },
+                raw: false
+            })
+            if (member) {
+                member.ten_tv = data.ten_nv;
+                member.ngay_sinh = data.ngay_sinh;
+                member.sdt = data.sdt;
+                member.email = data.email;
+                member.gioi_tinh = data.gioi_tinh;
+
+                await member.save();
                 resolve({
                     errCode: 0,
                     message: 'Cập nhật thành công'
@@ -394,6 +479,7 @@ let getAllTicketService = () => {
         try {
             let res = {};
             let ticket = await db.ct_hd_ve.findAll({
+                // offset: 5, limit: 5,
                 include: [
 
                     {
@@ -432,6 +518,67 @@ let getAllTicketService = () => {
             res.errCode = 0;
             res.data = ticket;
             resolve(res)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let handleGetTicketLimitService = (limit, page) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!limit || !page) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let res = {};
+                let ticket = await db.ct_hd_ve.findAndCountAll({
+                    order: [["id", "DESC"]],
+                    offset: parseInt(limit - 1) * page,
+                    limit: parseInt(limit),
+                    // order: [["id", "DESC"]],
+                    include: [
+
+                        {
+                            model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'],
+                            include:
+                                [
+                                    { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
+                                ]
+                        },
+                        {
+                            model: db.ghe, as: 'seatId', attributes: ['ten_ghe'],
+                            include: [
+                                {
+                                    model: db.phong_chieu, as: 'cinemaRoomData', attributes: ['so_phong'],
+                                    include: [
+                                        { model: db.rap, as: 'rapData', attributes: ['ten_rap'] }
+                                    ]
+                                },
+                            ]
+                        },
+                        {
+                            model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['movieId', 'showTime'],
+
+                            include: [
+                                { model: db.Phim, as: 'movieData', attributes: ['ten_phim'] }
+                            ]
+                        },
+
+
+
+
+                    ],
+                    raw: false,
+                    nest: true
+                });
+                res.errCode = 0;
+                res.data = ticket;
+                resolve(res)
+            }
+
         } catch (e) {
             reject(e);
         }
@@ -534,6 +681,8 @@ let searchTicketService = (condition) => {
 // }
 
 
+
+
 module.exports = {
     handleUserLogin: handleUserLogin,
     checkTenTK: checkTenTK,
@@ -553,5 +702,8 @@ module.exports = {
     CreateNewRating: CreateNewRating,
     getAllTicketService: getAllTicketService,
     deleteTicket: deleteTicket,
-    searchTicketService: searchTicketService
+    searchTicketService: searchTicketService,
+    handleGetTicketLimitService: handleGetTicketLimitService,
+    RegisterNow: RegisterNow,
+    updateMember: updateMember
 }

@@ -19,6 +19,9 @@ module.exports = {
       },
       id_tv: {
         type: Sequelize.INTEGER
+      },
+      role_id: {
+        type: Sequelize.INTEGER
       }
     });
   },

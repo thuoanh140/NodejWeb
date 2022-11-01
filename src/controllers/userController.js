@@ -66,6 +66,11 @@ let handleCreateNewEvent = async (req, res) => {
     return res.status(200).json(message);
 }
 
+let handleRegisterNow = async (req, res) => {
+    let message = await userServices.RegisterNow(req.body);
+    return res.status(200).json(message);
+}
+
 let handleCreateNewRating = async (req, res) => {
     let message = await userServices.CreateNewRating(req.body);
     return res.status(200).json(message);
@@ -74,6 +79,12 @@ let handleCreateNewRating = async (req, res) => {
 let handleEditStaff = async (req, res) => {
     let data = req.body;
     let message = await userServices.updateStaff(data);
+    return res.status(200).json(message)
+}
+
+let handleEditMember = async (req, res) => {
+    let data = req.body;
+    let message = await userServices.updateMember(data);
     return res.status(200).json(message)
 }
 
@@ -196,6 +207,19 @@ let getGenre = async (req, res) => {
 //     }
 // }
 
+let handleGetTicketLimit = async (req, res) => {
+    try {
+        let data = await userServices.handleGetTicketLimitService(req.query.limit, req.query.page);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin ve: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 module.exports = {
     handleLogin: handleLogin,
     handleGetAllStaff: handleGetAllStaff,
@@ -214,6 +238,9 @@ module.exports = {
     handleCreateNewRating: handleCreateNewRating,
     getAllTicket: getAllTicket,
     handleDeleteTicket: handleDeleteTicket,
-    searchTicket: searchTicket
+    searchTicket: searchTicket,
+    handleGetTicketLimit: handleGetTicketLimit,
+    handleRegisterNow: handleRegisterNow,
+    handleEditMember: handleEditMember
 
 }

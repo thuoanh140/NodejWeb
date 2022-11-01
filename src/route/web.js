@@ -18,8 +18,11 @@ let initWebRoutes = (app) => {
 
     router.post('/api/login', userController.handleLogin);
     router.get('/api/get-all-staff', userController.handleGetAllStaff);
+    router.get('/api/get-ticket-limit', userController.handleGetTicketLimit);
     router.post('/api/create-new-staff', userController.handleCreateNewStaff);
+    router.post('/api/register-now', userController.handleRegisterNow);
     router.put('/api/edit-staff', userController.handleEditStaff);
+    router.put('/api/edit-member', userController.handleEditMember);
     // router.put('/api/edit-ticket', userController.handleEditS);
     router.put('/api/cancel-ticket', userController.handleCancelTicket);
     router.delete('/api/delete-staff', userController.handleDeleteStaff);
