@@ -76,6 +76,11 @@ let handleCreateNewRating = async (req, res) => {
     return res.status(200).json(message);
 }
 
+let handleReportRating = async (req, res) => {
+    let message = await userServices.ReportRating(req.body);
+    return res.status(200).json(message);
+}
+
 let handleEditStaff = async (req, res) => {
     let data = req.body;
     let message = await userServices.updateStaff(data);
@@ -113,6 +118,28 @@ let handleDeleteTicket = async (req, res) => {
         })
     }
     let message = await userServices.deleteTicket(req.body.id);
+    return res.status(200).json(message)
+}
+
+let handleDeleteRating = async (req, res) => {
+    if (!req.body.id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'Thiếu các thông số bắt buộc!'
+        })
+    }
+    let message = await userServices.deleteRating(req.body.id);
+    return res.status(200).json(message)
+}
+
+let handleDeleteReport = async (req, res) => {
+    if (!req.body.id_dg) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'Thiếu các thông số bắt buộc!'
+        })
+    }
+    let message = await userServices.deleteReport(req.body.id_dg);
     return res.status(200).json(message)
 }
 
@@ -241,6 +268,9 @@ module.exports = {
     searchTicket: searchTicket,
     handleGetTicketLimit: handleGetTicketLimit,
     handleRegisterNow: handleRegisterNow,
-    handleEditMember: handleEditMember
+    handleEditMember: handleEditMember,
+    handleReportRating: handleReportRating,
+    handleDeleteRating: handleDeleteRating,
+    handleDeleteReport: handleDeleteReport
 
 }

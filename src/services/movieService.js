@@ -360,6 +360,34 @@ let getFoodService = () => {
     })
 }
 
+let getReportService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let res = {};
+            let food = await db.bao_xau_danh_gia.findAll({
+                include: [
+                    { model: db.thanh_vien, as: 'reportData', attributes: ['ten_tv'] },
+                    {
+                        model: db.danh_gia, as: 'ratingData', attributes: ['noi_dung'],
+                        include: [
+                            { model: db.thanh_vien, as: 'memberData', attributes: ['ten_tv'] },
+                        ]
+                    },
+                ],
+                raw: false,
+                nest: true
+            }
+
+            );
+            res.errCode = 0;
+            res.data = food;
+            resolve(res)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let getCinemaRoomService = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1202,5 +1230,6 @@ module.exports = {
     createPayment: createPayment,
     getMemberByIdTKService: getMemberByIdTKService,
     getRatingByIdMovieService: getRatingByIdMovieService,
-    getIdSeatByIdShowtimeService: getIdSeatByIdShowtimeService
+    getIdSeatByIdShowtimeService: getIdSeatByIdShowtimeService,
+    getReportService: getReportService
 }

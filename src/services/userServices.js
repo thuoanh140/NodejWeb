@@ -229,6 +229,24 @@ let CreateNewRating = (data) => {
     })
 }
 
+let ReportRating = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            await db.bao_xau_danh_gia.create({
+                noi_dung: data.noi_dung,
+                id_dg: data.id_dg,
+                id_tv: data.id_tv
+            })
+            resolve({
+                errCode: 0,
+                message: 'OK'
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let hashUserPassword = (mat_khau) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -310,6 +328,53 @@ let deleteTicket = (ticketId) => {
 
         await db.ct_hd_ve.destroy({
             where: { id: ticketId }
+        })
+        resolve({
+            errCode: 0,
+            Message: 'Xóa thành công'
+        })
+    })
+}
+
+let deleteRating = (ratingId) => {
+    return new Promise(async (resolve, reject) => {
+        let rating = await db.danh_gia.findOne({
+            where: { id: ratingId }
+        })
+
+        if (!rating) {
+            resolve({
+                errCode: 2,
+                errMessage: 'Đánh giá không tồn tại!'
+            })
+        }
+
+        await db.danh_gia.destroy({
+            where: { id: ratingId }
+        })
+        resolve({
+            errCode: 0,
+            Message: 'Xóa thành công'
+        })
+    })
+}
+
+
+let deleteReport = (reportId) => {
+    return new Promise(async (resolve, reject) => {
+        let report = await db.bao_xau_danh_gia.findAll({
+            where: { id_dg: reportId }
+        })
+
+        if (!report) {
+            resolve({
+                errCode: 2,
+                errMessage: 'Đánh giá không tồn tại!'
+            })
+        }
+
+        await db.bao_xau_danh_gia.destroy({
+            where: { id_dg: reportId }
         })
         resolve({
             errCode: 0,
@@ -704,5 +769,8 @@ module.exports = {
     searchTicketService: searchTicketService,
     handleGetTicketLimitService: handleGetTicketLimitService,
     RegisterNow: RegisterNow,
-    updateMember: updateMember
+    updateMember: updateMember,
+    ReportRating: ReportRating,
+    deleteRating: deleteRating,
+    deleteReport: deleteReport
 }

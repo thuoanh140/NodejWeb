@@ -27,6 +27,8 @@ let initWebRoutes = (app) => {
     router.put('/api/cancel-ticket', userController.handleCancelTicket);
     router.delete('/api/delete-staff', userController.handleDeleteStaff);
     router.delete('/api/delete-ticket', userController.handleDeleteTicket);
+    router.delete('/api/delete-rating', userController.handleDeleteRating);
+    router.delete('/api/delete-report', userController.handleDeleteReport);
 
     router.get('/api/get-movie', userController.getMovie);
     router.get('/api/get-all-ticket', userController.getAllTicket);
@@ -42,6 +44,7 @@ let initWebRoutes = (app) => {
     router.post('/api/create-new-food', userController.handleCreateNewFood);
     router.post('/api/create-new-event', userController.handleCreateNewEvent);
     router.post('/api/create-new-rating', userController.handleCreateNewRating);
+    router.post('/api/report-rating', userController.handleReportRating);
     router.post('/create_payment_url', movieService.createPayment);
 
     // router.get('/api/now-showing', movieController.getMovieNowShowing);
@@ -51,6 +54,7 @@ let initWebRoutes = (app) => {
     router.post('/api/create-detail-ticket', movieController.createDetailTicket);
     router.get('/api/get-now-showing', movieController.getMovieNowShowing);
     router.get('/api/get-event', movieController.getEvent);
+    router.get('/api/get-report', movieController.getReport);
     router.get('/api/get-payment-methods', movieController.getPaymentMethods);
     router.get('/api/get-all-movie', movieController.handleGetAllMovie);
     router.get('/api/get-movie-detail', movieController.handleGetMovieDetail);

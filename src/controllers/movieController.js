@@ -31,6 +31,8 @@ let getEvent = async (req, res) => {
     }
 }
 
+
+
 let handleGetMovieDetail = async (req, res) => {
     try {
         let data = await movieService.getMovieNowShowingById(req.query.ten_phim);
@@ -69,6 +71,19 @@ let getProvince = async (req, res) => {
         return res.status(200).json(data);
     } catch (e) {
         console.log('Có lỗi khi lấy thông tin tỉnh/tp: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getReport = async (req, res) => {
+    try {
+        let data = await movieService.getReportService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin report: ', e);
         return res.status(200).json({
             errCode: -1,
             errMessage: 'Error from server'
@@ -394,5 +409,6 @@ module.exports = {
     getDetailTicketByIdTicket: getDetailTicketByIdTicket,
     getMemberByIdTK: getMemberByIdTK,
     getRatingByIdMovie: getRatingByIdMovie,
-    getIdSeatByIdShowtime: getIdSeatByIdShowtime
+    getIdSeatByIdShowtime: getIdSeatByIdShowtime,
+    getReport: getReport
 }
