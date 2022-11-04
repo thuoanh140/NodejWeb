@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       rap.hasMany(models.suat_chieu_phim, { foreignKey: 'theaterId', as: 'theaterData' }),
-        rap.hasMany(models.phong_chieu, { foreignKey: 'rapId', as: 'rapData' })
+        rap.hasMany(models.phong_chieu, { foreignKey: 'rapId', as: 'rapData' }),
+        rap.belongsTo(models.tinh_tp, { foreignKey: 'tinh_tpId', targetKey: 'id', as: 'tinh_rap' })
 
     }
   }

@@ -93,7 +93,7 @@ let getReport = async (req, res) => {
 
 let getTheater = async (req, res) => {
     try {
-        let data = await movieService.getTheaterService();
+        let data = await movieService.getTheaterService(req.query.tinh_tpId);
         return res.status(200).json(data);
     } catch (e) {
         console.log('Có lỗi khi lấy thông tin rạp: ', e);
@@ -132,7 +132,7 @@ let getPaymentMethods = async (req, res) => {
 
 let getCinemaRoom = async (req, res) => {
     try {
-        let data = await movieService.getCinemaRoomService();
+        let data = await movieService.getCinemaRoomService(req.query.rapId);
         return res.status(200).json(data);
     } catch (e) {
         console.log('Có lỗi khi lấy thông tin phòng chiếu: ', e);

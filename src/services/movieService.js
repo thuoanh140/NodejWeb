@@ -324,14 +324,14 @@ let getProvinceService = () => {
     })
 }
 
-let getTheaterService = () => {
+let getTheaterService = (tinhId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let res = {};
             let theater = await db.rap.findAll(
-                // {
-                //     where: { tinh_tpId: tinh_tpId }
-                // }
+                {
+                    where: { tinh_tpId: tinhId }
+                }
             );
             res.errCode = 0;
             res.data = theater;
@@ -388,11 +388,16 @@ let getReportService = () => {
     })
 }
 
-let getCinemaRoomService = () => {
+let getCinemaRoomService = (rapId) => {
     return new Promise(async (resolve, reject) => {
         try {
             let res = {};
-            let cinema_room = await db.phong_chieu.findAll();
+            let cinema_room = await db.phong_chieu.findAll({
+                where: { rapId: rapId },
+                order: [
+                    ['id', 'DESC']
+                ]
+            });
             res.errCode = 0;
             res.data = cinema_room;
             resolve(res)
