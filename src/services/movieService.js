@@ -216,6 +216,33 @@ let getMovieNowShowingService = (limitInput) => {
     return new Promise(async (resolve, reject) => {
         try {
             let movies = await db.Phim.findAll({
+                where: { id_trang_thai: 1 },
+                limit: limitInput,
+                order: [['id', 'ASC']],
+                raw: false,
+                nest: true
+
+            })
+            // if (data && data.poster) {
+            //     data.poster = new Buffer(data.poster, 'base64').toString('binary');
+            // }
+
+            resolve({
+                errCode: 0,
+                data: movies
+
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getMovieComingSoonService = (limitInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let movies = await db.Phim.findAll({
+                where: { id_trang_thai: 2 },
                 limit: limitInput,
                 order: [['id', 'ASC']],
                 raw: false,
@@ -442,6 +469,20 @@ let getPaymentMethodsService = () => {
             let paymentMethods = await db.pt_thanhtoan.findAll();
             res.errCode = 0;
             res.data = paymentMethods;
+            resolve(res)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getStateMovieService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let res = {};
+            let state = await db.trang_thai_phim.findAll();
+            res.errCode = 0;
+            res.data = state;
             resolve(res)
         } catch (e) {
             reject(e);
@@ -1165,7 +1206,7 @@ let CreateNewDetailTicket = (data) => {
 async function createPayment(req, res, next) {
     let vnpay = new VNPay({
         secretKey: 'JOARTEJWKARRBHUVNBHNQDJYVWOMONRI',
-        returnUrl: 'http://localhost:3000/login-membership',
+        returnUrl: 'http://localhost:3000/home',
         merchantCode: '7J3FP9LC',
         hashAlgorithm: 'sha256',
         // vnpVersion: '2.0.1'
@@ -1236,5 +1277,7 @@ module.exports = {
     getMemberByIdTKService: getMemberByIdTKService,
     getRatingByIdMovieService: getRatingByIdMovieService,
     getIdSeatByIdShowtimeService: getIdSeatByIdShowtimeService,
-    getReportService: getReportService
+    getReportService: getReportService,
+    getStateMovieService: getStateMovieService,
+    getMovieComingSoonService: getMovieComingSoonService
 }

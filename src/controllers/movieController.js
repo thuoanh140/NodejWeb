@@ -16,6 +16,21 @@ let getMovieNowShowing = async (req, res) => {
     }
 }
 
+let getMovieComingSoon = async (req, res) => {
+    let limit = req.query.limit;
+    if (!limit) limit = 10;
+    try {
+        let response = await movieService.getMovieComingSoonService(+limit);
+        return res.status(200).json(response);
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            message: 'Lỗi từ server'
+        })
+    }
+}
+
 let getEvent = async (req, res) => {
     let limit = req.query.limit;
     if (!limit) limit = 10;
@@ -123,6 +138,19 @@ let getPaymentMethods = async (req, res) => {
         return res.status(200).json(data);
     } catch (e) {
         console.log('Có lỗi khi lấy thông tin PTTT: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getStateMovie = async (req, res) => {
+    try {
+        let data = await movieService.getStateMovieService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin trang thai phim: ', e);
         return res.status(200).json({
             errCode: -1,
             errMessage: 'Error from server'
@@ -410,5 +438,7 @@ module.exports = {
     getMemberByIdTK: getMemberByIdTK,
     getRatingByIdMovie: getRatingByIdMovie,
     getIdSeatByIdShowtime: getIdSeatByIdShowtime,
-    getReport: getReport
+    getReport: getReport,
+    getStateMovie: getStateMovie,
+    getMovieComingSoon: getMovieComingSoon
 }

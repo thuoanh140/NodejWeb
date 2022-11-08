@@ -36,7 +36,13 @@ module.exports = {
         type: Sequelize.STRING
       },
       poster: {
-        type: Sequelize.TEXT
+        type: Sequelize.BLOB
+      },
+      the_loai: {
+        type: Sequelize.STRING
+      },
+      id_trang_thai: {
+        type: Sequelize.INTEGER
       }
     });
   },

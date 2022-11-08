@@ -13,7 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Phim.belongsToMany(models.The_Loai_Phim, { through: 'Phim_The_Loai_Phim' }),
         Phim.hasMany(models.suat_chieu_phim, { foreignKey: 'movieId', as: 'movieData' })
-
     }
   }
   Phim.init({
@@ -26,7 +25,9 @@ module.exports = (sequelize, DataTypes) => {
     gh_tuoi: DataTypes.STRING,
     tom_tat: DataTypes.TEXT,
     ngon_ngu: DataTypes.STRING,
-    poster: DataTypes.TEXT
+    poster: DataTypes.BLOB,
+    the_loai: DataTypes.STRING,
+    id_trang_thai: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Phim',

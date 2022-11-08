@@ -53,9 +53,11 @@ let initWebRoutes = (app) => {
     router.post('/api/create-bill-food', movieController.createBillFood);
     router.post('/api/create-detail-ticket', movieController.createDetailTicket);
     router.get('/api/get-now-showing', movieController.getMovieNowShowing);
+    router.get('/api/get-coming-soon', movieController.getMovieComingSoon);
     router.get('/api/get-event', movieController.getEvent);
     router.get('/api/get-report', movieController.getReport);
     router.get('/api/get-payment-methods', movieController.getPaymentMethods);
+    router.get('/api/get-state-movie', movieController.getStateMovie);
     router.get('/api/get-all-movie', movieController.handleGetAllMovie);
     router.get('/api/get-movie-detail', movieController.handleGetMovieDetail);
     router.get('/api/get-movie-format-by-Id', movieController.getMovieFormatById);
