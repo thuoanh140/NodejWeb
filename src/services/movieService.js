@@ -632,6 +632,42 @@ let getShowtimeByDateService = (movieId, provinceId, date) => {
     })
 }
 
+
+let getRevenueByDateService = (ngay_ban) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!ngay_ban) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let data = await db.ve_ban.findAll({
+                    where: {
+                        ngay_ban: ngay_ban,
+                        trang_thai_ve: true
+                    },
+                    include: [
+                        { model: db.ct_hd_ve, as: 'ticketData', attributes: ['don_gia_ve', 'so_luong_ve'] },
+                    ],
+                    raw: false,
+                    nest: true
+
+                })
+
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 // let getMovieFormatByIdService = (movieId, provinceId) => {
 //     return new Promise(async (resolve, reject) => {
 //         try {
@@ -1279,5 +1315,6 @@ module.exports = {
     getIdSeatByIdShowtimeService: getIdSeatByIdShowtimeService,
     getReportService: getReportService,
     getStateMovieService: getStateMovieService,
-    getMovieComingSoonService: getMovieComingSoonService
+    getMovieComingSoonService: getMovieComingSoonService,
+    getRevenueByDateService: getRevenueByDateService
 }

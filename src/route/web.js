@@ -71,6 +71,7 @@ let initWebRoutes = (app) => {
     router.get('/api/get-idSeat-by-idShowtime', movieController.getIdSeatByIdShowtime);
     router.get('/api/get-email-by-Id', movieController.getEmailById);
     router.get('/api/get-showtime-by-date', movieController.getShowtimeByDate);
+    router.get('/api/get-revenue-by-date', movieController.getRevenueByDate);
     router.get('/api/get-seat-by-cinemaRoomId', movieController.getSeatByCinemaRoomId);
     router.get('/api/get-seat-by-cinemaRoomIdVIP', movieController.getSeatByCinemaRoomIdVIP);
 

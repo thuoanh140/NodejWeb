@@ -408,6 +408,19 @@ let getShowtimeByDate = async (req, res) => {
     }
 }
 
+let getRevenueByDate = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueByDateService(req.query.ngay_ban);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 
 module.exports = {
     getMovieNowShowing: getMovieNowShowing,
@@ -440,5 +453,6 @@ module.exports = {
     getIdSeatByIdShowtime: getIdSeatByIdShowtime,
     getReport: getReport,
     getStateMovie: getStateMovie,
-    getMovieComingSoon: getMovieComingSoon
+    getMovieComingSoon: getMovieComingSoon,
+    getRevenueByDate: getRevenueByDate
 }
