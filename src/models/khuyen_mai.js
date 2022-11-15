@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
   khuyen_mai.init({
     ten_km: DataTypes.STRING,
     thoi_gian_kt: DataTypes.DATEONLY,
+    ma_giam_gia: DataTypes.STRING,
+    so_luot_sd: DataTypes.INTEGER,
     giam_gia_hd: DataTypes.DECIMAL,
     anh_event: DataTypes.BLOB
   }, {

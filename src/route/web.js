@@ -25,12 +25,15 @@ let initWebRoutes = (app) => {
     router.put('/api/edit-member', userController.handleEditMember);
     // router.put('/api/edit-ticket', userController.handleEditS);
     router.put('/api/cancel-ticket', userController.handleCancelTicket);
+    router.put('/api/minus-quantity', userController.minusQuantity);
+    router.put('/api/payment-vnpay-success', userController.paymentVnpaySuccess);
     router.delete('/api/delete-staff', userController.handleDeleteStaff);
     router.delete('/api/delete-ticket', userController.handleDeleteTicket);
     router.delete('/api/delete-rating', userController.handleDeleteRating);
     router.delete('/api/delete-report', userController.handleDeleteReport);
 
     router.get('/api/get-movie', userController.getMovie);
+    router.get('/api/compare-voucher', userController.compareVoucher);
     router.get('/api/get-all-ticket', userController.getAllTicket);
     router.get('/api/search-ticket', userController.searchTicket);
     router.get('/api/get-genre', userController.getGenre);
@@ -38,6 +41,7 @@ let initWebRoutes = (app) => {
     router.get('/api/get-showtime', movieController.getShowtime);
     router.get('/api/get-movie-format', movieController.getMovieFormat);
     router.get('/api/get-theater', movieController.getTheater);
+    router.get('/api/get-all-membership', userController.getAllMembership);
     router.get('/api/get-food', movieController.getFood);
     router.get('/api/get-cinema-room', movieController.getCinemaRoom);
     router.post('/api/create-new-movie', userController.handleCreateNewMovie);
@@ -65,7 +69,9 @@ let initWebRoutes = (app) => {
     router.get('/api/get-movie-by-Id', movieController.getMovieById);
     router.get('/api/get-member-by-IdTK', movieController.getMemberByIdTK);
     router.get('/api/get-Ticket-by-IdTV', movieController.getTicketByIdTV);
+    router.get('/api/get-Ticket-unpaid-by-IdTV', movieController.getTicketUnpaidByIdTV);
     router.get('/api/get-DetailTicket-by-IdTicket', movieController.getDetailTicketByIdTicket);
+    // router.get('/api/get-DetailTicket-unpaid-by-IdTicket', movieController.getDetailTicketUnPaidByIdTicket);
     router.get('/api/get-payment-by-Id', movieController.getPaymentById);
     router.get('/api/get-rating-by-IdMovie', movieController.getRatingByIdMovie);
     router.get('/api/get-idSeat-by-idShowtime', movieController.getIdSeatByIdShowtime);

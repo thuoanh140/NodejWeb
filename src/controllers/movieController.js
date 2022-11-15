@@ -262,6 +262,19 @@ let getTicketByIdTV = async (req, res) => {
     }
 }
 
+let getTicketUnpaidByIdTV = async (req, res) => {
+    try {
+        let data = await movieService.getTicketUnpaidByIdTVService(req.query.id_tv);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin phim: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getIdSeatByIdShowtime = async (req, res) => {
     try {
         let data = await movieService.getIdSeatByIdShowtimeService(req.query.id_suat_chieu);
@@ -454,5 +467,6 @@ module.exports = {
     getReport: getReport,
     getStateMovie: getStateMovie,
     getMovieComingSoon: getMovieComingSoon,
-    getRevenueByDate: getRevenueByDate
+    getRevenueByDate: getRevenueByDate,
+    getTicketUnpaidByIdTV: getTicketUnpaidByIdTV
 }

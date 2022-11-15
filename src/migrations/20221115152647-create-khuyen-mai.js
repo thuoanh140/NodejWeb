@@ -14,6 +14,12 @@ module.exports = {
       thoi_gian_kt: {
         type: Sequelize.DATEONLY
       },
+      ma_giam_gia: {
+        type: Sequelize.STRING
+      },
+      so_luot_sd: {
+        type: Sequelize.INTEGER
+      },
       giam_gia_hd: {
         type: Sequelize.DECIMAL
       },

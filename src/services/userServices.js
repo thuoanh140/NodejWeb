@@ -497,6 +497,78 @@ let cancelTicket = (id) => {
     })
 }
 
+let minusQuantityService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Thiếu các tham số bắt buộc!'
+                })
+            }
+            let event = await db.khuyen_mai.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (event) {
+                event.so_luot_sd = event.so_luot_sd - 1;
+                await event.save();
+
+                resolve({
+                    errCode: 0,
+                    message: 'Cập nhật thành công'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy khuyen mai!'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let paymentVnpaySuccessService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Thiếu các tham số bắt buộc!'
+                })
+            }
+            let ticketCancel = await db.ve_ban.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (ticketCancel) {
+                ticketCancel.trang_thai_ve = true;
+                await ticketCancel.save();
+
+                resolve({
+                    errCode: 0,
+                    message: 'Cập nhật thành công'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy vé!'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 
 
 let getMovieService = (inputId) => {
@@ -516,6 +588,44 @@ let getMovieService = (inputId) => {
                 res.errCode = 0;
                 res.data = movie;
                 resolve(res)
+            }
+
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let compareVoucherService = (voucher) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!voucher) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Chưa nhập vào mã giảm giá!'
+                })
+
+            } else {
+
+                let res = {};
+                let event = await db.khuyen_mai.findOne({
+                    where: { ma_giam_gia: voucher },
+                    // attributes: ['ma_giam_gia', 'giam_gia_hd', 'so_luot_sd']
+                });
+                if (event) {
+                    res.errCode = 0;
+                    res.errMessage = 'Áp dụng mã giảm giá thành công!';
+                    res.data = event.giam_gia_hd;
+                    res.id = event.id;
+                    resolve(res)
+                }
+                else {
+                    res.errCode = 2;
+                    res.errMessage = 'Mã giảm giá bạn nhập vào chưa đúng';
+                    resolve(res)
+                }
+
             }
 
 
@@ -589,6 +699,21 @@ let getAllTicketService = () => {
     })
 }
 
+
+let getAllMembershiptService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let res = {};
+            let membership = await db.thanh_vien.findAll();
+            res.errCode = 0;
+            res.data = membership;
+            resolve(res)
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let handleGetTicketLimitService = (limit = 20, page = 1) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -609,8 +734,10 @@ let handleGetTicketLimitService = (limit = 20, page = 1) => {
                             model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'],
                             include:
                                 [
-                                    { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
-                                ]
+                                    { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] },
+                                    { model: db.thanh_vien, as: 'sdtData', attributes: ['sdt'] }
+                                ],
+
                         },
                         {
                             model: db.ghe, as: 'seatId', attributes: ['ten_ghe'],
@@ -772,5 +899,9 @@ module.exports = {
     updateMember: updateMember,
     ReportRating: ReportRating,
     deleteRating: deleteRating,
-    deleteReport: deleteReport
+    deleteReport: deleteReport,
+    getAllMembershiptService: getAllMembershiptService,
+    paymentVnpaySuccessService: paymentVnpaySuccessService,
+    compareVoucherService: compareVoucherService,
+    minusQuantityService: minusQuantityService
 }

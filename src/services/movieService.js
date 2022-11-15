@@ -4,8 +4,8 @@ import emailService from './emailService';
 import express from "express";
 import { stringify } from 'querystring';
 let router = express.Router();
-const VNPay = require('node-vnpay');
-
+const VNPay = require('../libs/node-vnpay');
+const { Sequelize } = require('sequelize')
 
 
 // ESM
@@ -647,13 +647,22 @@ let getRevenueByDateService = (ngay_ban) => {
                         ngay_ban: ngay_ban,
                         trang_thai_ve: true
                     },
+                    attributes: [
+                        'ngay_ban',
+                        [Sequelize.fn('SUM', Sequelize.col('ticketData.don_gia_ve')), 'total'],
+
+                    ],
                     include: [
                         { model: db.ct_hd_ve, as: 'ticketData', attributes: ['don_gia_ve', 'so_luong_ve'] },
                     ],
+                    group: ['ngay_ban'],
+                    // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
                     raw: false,
                     nest: true
 
                 })
+
+
 
                 if (!data) data = [];
                 resolve({
@@ -939,6 +948,36 @@ let getTicketByIdTVService = (id_tv) => {
     })
 }
 
+let getTicketUnpaidByIdTVService = (id_tv) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id_tv) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let data = await db.ve_ban.findAll({
+                    where: {
+                        id_tv: id_tv,
+                        trang_thai_ve: null
+                    },
+
+                })
+
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let getIdSeatByIdShowtimeService = (idShowtime) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -979,7 +1018,12 @@ let getDetailTicketByIdTicketService = (id) => {
                 let data = await db.ct_hd_ve.findAll({
                     where: { id: id },
                     include: [
-                        { model: db.ve_ban, as: 'ticketData', attributes: ['ngay_ban'] },
+                        {
+                            model: db.ve_ban, as: 'ticketData', attributes: ['ngay_ban'],
+                            include: [
+                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
+                            ]
+                        },
                         { model: db.ghe, as: 'seatId', attributes: ['ten_ghe'] },
                         {
                             model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['movieId', 'showTime'],
@@ -1151,11 +1195,14 @@ let CreateNewTicket = (data) => {
                     })
                 }
                 await db.ct_hd_ve.bulkCreate(CTHDV)
+                resolve({
+                    errCode: 0,
+                    message: 'OK',
+                    id_ve: result.id
+                })
+
             })
-            resolve({
-                errCode: 0,
-                message: 'OK'
-            })
+
         } catch (e) {
             reject(e);
         }
@@ -1165,25 +1212,6 @@ let CreateNewTicket = (data) => {
 let CreateNewBillFood = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // let emailReceiver = data.email;
-            // let name = data.name;
-            // let date = data.dateBooking;
-            // let movieName = data.movieNameBooking;
-            // let showTime = data.showTimeBooking;
-            // let theater = data.theaterBooking;
-            // let seat = data.arrSeat;
-            // await emailService.sendSimpleEmail({
-            //     receiverEmail: emailReceiver,
-            //     name: name,
-            //     date: date,
-            //     movieName: movieName,
-            //     showTime: showTime,
-            //     theater: theater,
-            //     seat: seat.map(item => {
-            //         return item;
-            //     })
-            // })
-            // console.log(emailReceiver)
             await db.hoa_don_thuc_an.create({
                 id_pttt: data.id_pttt,
                 id_tv: data.id_tv,
@@ -1316,5 +1344,6 @@ module.exports = {
     getReportService: getReportService,
     getStateMovieService: getStateMovieService,
     getMovieComingSoonService: getMovieComingSoonService,
-    getRevenueByDateService: getRevenueByDateService
+    getRevenueByDateService: getRevenueByDateService,
+    getTicketUnpaidByIdTVService: getTicketUnpaidByIdTVService
 }

@@ -99,6 +99,19 @@ let handleCancelTicket = async (req, res) => {
     return res.status(200).json(message)
 }
 
+
+let minusQuantity = async (req, res) => {
+    // let data = req.body.id;
+    let message = await userServices.minusQuantityService(req.query.id);
+    return res.status(200).json(message)
+}
+
+let paymentVnpaySuccess = async (req, res) => {
+    // let data = req.body.id;
+    let message = await userServices.paymentVnpaySuccessService(req.query.id);
+    return res.status(200).json(message)
+}
+
 let handleDeleteStaff = async (req, res) => {
     if (!req.body.id) {
         return res.status(200).json({
@@ -156,12 +169,38 @@ let getMovie = async (req, res) => {
     }
 }
 
+let compareVoucher = async (req, res) => {
+    try {
+        let data = await userServices.compareVoucherService(req.query.ma_giam_gia);
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin ma giam gia: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getAllTicket = async (req, res) => {
     try {
         let data = await userServices.getAllTicketService();
         return res.status(200).json(data);
     } catch (e) {
         console.log('Có lỗi khi lấy thông tin ve: ', e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getAllMembership = async (req, res) => {
+    try {
+        let data = await userServices.getAllMembershiptService();
+        return res.status(200).json(data);
+    } catch (e) {
+        console.log('Có lỗi khi lấy thông tin thanh vien: ', e);
         return res.status(200).json({
             errCode: -1,
             errMessage: 'Error from server'
@@ -271,6 +310,10 @@ module.exports = {
     handleEditMember: handleEditMember,
     handleReportRating: handleReportRating,
     handleDeleteRating: handleDeleteRating,
-    handleDeleteReport: handleDeleteReport
+    handleDeleteReport: handleDeleteReport,
+    getAllMembership: getAllMembership,
+    paymentVnpaySuccess: paymentVnpaySuccess,
+    compareVoucher: compareVoucher,
+    minusQuantity: minusQuantity
 
 }
