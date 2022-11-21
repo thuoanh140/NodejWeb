@@ -434,6 +434,58 @@ let getRevenueByDate = async (req, res) => {
     }
 }
 
+let getRevenueTheaterByDate = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueTheaterByDateService(req.query.ngay_ban);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getRevenueMovie = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueMovieService();
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getRevenueTheater = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueTheatereService();
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+let getRevenueFoodByDate = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueFoodByDateService(req.query.ngay_ban);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 
 module.exports = {
     getMovieNowShowing: getMovieNowShowing,
@@ -468,5 +520,9 @@ module.exports = {
     getStateMovie: getStateMovie,
     getMovieComingSoon: getMovieComingSoon,
     getRevenueByDate: getRevenueByDate,
-    getTicketUnpaidByIdTV: getTicketUnpaidByIdTV
+    getTicketUnpaidByIdTV: getTicketUnpaidByIdTV,
+    getRevenueFoodByDate: getRevenueFoodByDate,
+    getRevenueMovie: getRevenueMovie,
+    getRevenueTheater: getRevenueTheater,
+    getRevenueTheaterByDate: getRevenueTheaterByDate
 }

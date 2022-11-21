@@ -642,7 +642,7 @@ let getRevenueByDateService = (ngay_ban) => {
                     errMessage: 'Thiếu các tham số bắt buộc'
                 })
             } else {
-                let data = await db.ve_ban.findAll({
+                let inf = await db.ve_ban.findAll({
                     where: {
                         ngay_ban: ngay_ban,
                         trang_thai_ve: true
@@ -650,6 +650,7 @@ let getRevenueByDateService = (ngay_ban) => {
                     attributes: [
                         'ngay_ban',
                         [Sequelize.fn('SUM', Sequelize.col('ticketData.don_gia_ve')), 'total'],
+                        [Sequelize.fn('SUM', Sequelize.col('ticketData.so_luong_ve')), 'totalTicket']
 
                     ],
                     include: [
@@ -664,10 +665,241 @@ let getRevenueByDateService = (ngay_ban) => {
 
 
 
-                if (!data) data = [];
+                // if (!inf) data = [];
                 resolve({
                     errCode: 0,
-                    data: data
+                    data: inf,
+
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getRevenueTheaterByDateService = (ngay_ban) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!ngay_ban) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let inf = await db.ve_ban.findAll({
+                    where: {
+                        ngay_ban: ngay_ban,
+                        trang_thai_ve: true
+                    },
+                    attributes: [
+                        'ngay_ban',
+                        [Sequelize.fn('SUM', Sequelize.col('ticketData.don_gia_ve')), 'total'],
+                        [Sequelize.fn('SUM', Sequelize.col('ticketData.so_luong_ve')), 'totalTicket']
+
+                    ],
+                    include: [
+                        {
+                            model: db.ct_hd_ve, as: 'ticketData', attributes: ['don_gia_ve', 'so_luong_ve']
+                            ,
+                            // group: ['id_suat_chieu'],
+                            include:
+                                [
+                                    {
+                                        model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['theaterId'],
+
+                                        include: [
+                                            {
+                                                model: db.rap, as: 'theaterData', attributes: ['ten_rap'],
+
+                                            },
+                                        ],
+
+                                    },
+
+
+                                ]
+                        },
+                    ],
+                    group: ['ticketData.suatChieuId.theaterId'],
+                    // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
+                    raw: false,
+                    nest: true
+
+                })
+
+
+
+                // if (!inf) data = [];
+                resolve({
+                    errCode: 0,
+                    data: inf,
+
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getRevenueMovieService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let inf = await db.ve_ban.findAll({
+                where: {
+                    trang_thai_ve: true
+                },
+                attributes: [
+
+                    [Sequelize.fn('SUM', Sequelize.col('ticketData.don_gia_ve')), 'total'],
+
+
+                ],
+
+                include: [
+                    {
+                        model: db.ct_hd_ve, as: 'ticketData', attributes: ['don_gia_ve', 'so_luong_ve']
+                        ,
+                        // group: ['id_suat_chieu'],
+                        include:
+                            [
+                                {
+                                    model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['movieId'],
+
+                                    include: [
+                                        {
+                                            model: db.Phim, as: 'movieData', attributes: ['ten_phim'],
+
+                                        },
+                                    ],
+
+                                },
+
+
+                            ]
+                    },
+                ],
+                group: ['ticketData.suatChieuId.movieId'],
+                // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
+                raw: false,
+                nest: true
+
+            })
+
+
+
+            if (!inf) data = [];
+            resolve({
+                errCode: 0,
+                data: inf,
+            })
+
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getRevenueTheatereService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let inf = await db.ve_ban.findAll({
+                where: {
+                    trang_thai_ve: true
+                },
+                attributes: [
+
+                    [Sequelize.fn('SUM', Sequelize.col('ticketData.don_gia_ve')), 'total'],
+                    [Sequelize.fn('SUM', Sequelize.col('ticketData.so_luong_ve')), 'totalTicket']
+
+                ],
+
+                include: [
+                    {
+                        model: db.ct_hd_ve, as: 'ticketData', attributes: ['don_gia_ve', 'so_luong_ve']
+                        ,
+                        // group: ['id_suat_chieu'],
+                        include:
+                            [
+                                {
+                                    model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['theaterId'],
+
+                                    include: [
+                                        {
+                                            model: db.rap, as: 'theaterData', attributes: ['ten_rap'],
+
+                                        },
+                                    ],
+
+                                },
+
+
+                            ]
+                    },
+                ],
+                group: ['ticketData.suatChieuId.theaterId'],
+                // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
+                raw: false,
+                nest: true
+
+            })
+
+
+
+            if (!inf) data = [];
+            resolve({
+                errCode: 0,
+                data: inf,
+            })
+
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getRevenueFoodByDateService = (ngay_ban) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!ngay_ban) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let inf = await db.hoa_don_thuc_an.findAll({
+                    where: {
+                        ngay_ban: ngay_ban,
+                        trang_thai_hd: true
+                    },
+                    attributes: [
+                        'ngay_ban',
+                        [Sequelize.fn('SUM', Sequelize.col('hoadonId.don_gia')), 'total'],
+
+                    ],
+                    include: [
+                        { model: db.cthd_thucan, as: 'hoadonId', attributes: ['don_gia', 'so_luong'] },
+                    ],
+                    group: ['ngay_ban'],
+                    // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
+                    raw: false,
+                    nest: true
+
+                })
+
+
+
+                if (!inf) data = [];
+                resolve({
+                    errCode: 0,
+                    data: inf,
                 })
             }
 
@@ -1345,5 +1577,9 @@ module.exports = {
     getStateMovieService: getStateMovieService,
     getMovieComingSoonService: getMovieComingSoonService,
     getRevenueByDateService: getRevenueByDateService,
-    getTicketUnpaidByIdTVService: getTicketUnpaidByIdTVService
+    getTicketUnpaidByIdTVService: getTicketUnpaidByIdTVService,
+    getRevenueFoodByDateService: getRevenueFoodByDateService,
+    getRevenueMovieService: getRevenueMovieService,
+    getRevenueTheatereService: getRevenueTheatereService,
+    getRevenueTheaterByDateService: getRevenueTheaterByDateService
 }

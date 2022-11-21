@@ -553,7 +553,8 @@ let paymentVnpaySuccessService = (id) => {
 
                 resolve({
                     errCode: 0,
-                    message: 'Cập nhật thành công'
+                    message: 'Cập nhật thành công',
+                    id_km: ticketCancel.id_km
                 })
             }
             else {

@@ -78,6 +78,10 @@ let initWebRoutes = (app) => {
     router.get('/api/get-email-by-Id', movieController.getEmailById);
     router.get('/api/get-showtime-by-date', movieController.getShowtimeByDate);
     router.get('/api/get-revenue-by-date', movieController.getRevenueByDate);
+    router.get('/api/get-revenue-theater-by-date', movieController.getRevenueTheaterByDate);
+    router.get('/api/get-revenue-by-movie', movieController.getRevenueMovie);
+    router.get('/api/get-revenue-by-theater', movieController.getRevenueTheater);
+    router.get('/api/get-revenue-food-by-date', movieController.getRevenueFoodByDate);
     router.get('/api/get-seat-by-cinemaRoomId', movieController.getSeatByCinemaRoomId);
     router.get('/api/get-seat-by-cinemaRoomIdVIP', movieController.getSeatByCinemaRoomIdVIP);
 
