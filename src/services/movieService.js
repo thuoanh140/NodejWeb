@@ -805,6 +805,52 @@ let getRevenueMovieService = () => {
     })
 }
 
+let getRevenueFoodByTheaterService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            let inf = await db.hoa_don_thuc_an.findAll({
+                where: {
+                    trang_thai_hd: true
+                },
+                attributes: [
+
+                    [Sequelize.fn('SUM', Sequelize.col('hoadonId.don_gia')), 'total'],
+
+
+                ],
+
+                include: [
+                    {
+                        model: db.cthd_thucan, as: 'hoadonId', attributes: ['don_gia', 'so_luong']
+
+                    },
+                    {
+                        model: db.rap, as: 'billData', attributes: ['ten_rap']
+                    }
+                ],
+                group: ['id_rap'],
+                // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
+                raw: false,
+                nest: true
+
+            })
+
+
+
+            if (!inf) data = [];
+            resolve({
+                errCode: 0,
+                data: inf,
+            })
+
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let getRevenueTheatereService = () => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -886,6 +932,53 @@ let getRevenueFoodByDateService = (ngay_ban) => {
                     ],
                     include: [
                         { model: db.cthd_thucan, as: 'hoadonId', attributes: ['don_gia', 'so_luong'] },
+                    ],
+                    group: ['ngay_ban'],
+                    // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
+                    raw: false,
+                    nest: true
+
+                })
+
+
+
+                if (!inf) data = [];
+                resolve({
+                    errCode: 0,
+                    data: inf,
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getRevenueFoodTheaterByDateService = (ngay_ban) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!ngay_ban) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let inf = await db.hoa_don_thuc_an.findAll({
+                    where: {
+                        ngay_ban: ngay_ban,
+                        trang_thai_hd: true
+                    },
+                    attributes: [
+                        'ngay_ban',
+                        [Sequelize.fn('SUM', Sequelize.col('hoadonId.don_gia')), 'total'],
+
+                    ],
+                    include: [
+                        { model: db.cthd_thucan, as: 'hoadonId', attributes: ['don_gia', 'so_luong'] },
+                        {
+                            model: db.rap, as: 'billData', attributes: ['ten_rap']
+                        }
                     ],
                     group: ['ngay_ban'],
                     // attributes: ['ticketData', [sequelize.fn('sum', sequelize.col('don_gia_ve')), 'total']],
@@ -1581,5 +1674,7 @@ module.exports = {
     getRevenueFoodByDateService: getRevenueFoodByDateService,
     getRevenueMovieService: getRevenueMovieService,
     getRevenueTheatereService: getRevenueTheatereService,
-    getRevenueTheaterByDateService: getRevenueTheaterByDateService
+    getRevenueTheaterByDateService: getRevenueTheaterByDateService,
+    getRevenueFoodByTheaterService: getRevenueFoodByTheaterService,
+    getRevenueFoodTheaterByDateService: getRevenueFoodTheaterByDateService
 }

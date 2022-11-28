@@ -460,6 +460,19 @@ let getRevenueMovie = async (req, res) => {
     }
 }
 
+let getRevenueFoodByTheater = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueFoodByTheaterService();
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
 let getRevenueTheater = async (req, res) => {
     try {
         let infor = await movieService.getRevenueTheatereService();
@@ -476,6 +489,20 @@ let getRevenueTheater = async (req, res) => {
 let getRevenueFoodByDate = async (req, res) => {
     try {
         let infor = await movieService.getRevenueFoodByDateService(req.query.ngay_ban);
+        return res.status(200).json(infor)
+    } catch (e) {
+        console.log(e);
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        })
+    }
+}
+
+
+let getRevenueFoodTheaterByDate = async (req, res) => {
+    try {
+        let infor = await movieService.getRevenueFoodTheaterByDateService(req.query.ngay_ban);
         return res.status(200).json(infor)
     } catch (e) {
         console.log(e);
@@ -524,5 +551,7 @@ module.exports = {
     getRevenueFoodByDate: getRevenueFoodByDate,
     getRevenueMovie: getRevenueMovie,
     getRevenueTheater: getRevenueTheater,
-    getRevenueTheaterByDate: getRevenueTheaterByDate
+    getRevenueTheaterByDate: getRevenueTheaterByDate,
+    getRevenueFoodByTheater: getRevenueFoodByTheater,
+    getRevenueFoodTheaterByDate: getRevenueFoodTheaterByDate
 }

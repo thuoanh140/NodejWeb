@@ -25,6 +25,9 @@ module.exports = {
       },
       id_tv: {
         type: Sequelize.INTEGER
+      },
+      id_rap: {
+        type: Sequelize.INTEGER
       }
     });
   },

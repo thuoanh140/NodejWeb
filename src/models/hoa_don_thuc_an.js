@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      hoa_don_thuc_an.hasMany(models.cthd_thucan, { foreignKey: 'id', as: 'hoadonId' })
+      hoa_don_thuc_an.hasMany(models.cthd_thucan, { foreignKey: 'id', as: 'hoadonId' }),
+        hoa_don_thuc_an.belongsTo(models.rap, { foreignKey: 'id_rap', targetKey: 'id', as: 'billData' })
     }
   }
   hoa_don_thuc_an.init({
@@ -20,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     trang_thai_hd: DataTypes.BOOLEAN,
     id_pttt: DataTypes.INTEGER,
     id_km: DataTypes.INTEGER,
-    id_tv: DataTypes.INTEGER
+    id_tv: DataTypes.INTEGER,
+    id_rap: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'hoa_don_thuc_an',
