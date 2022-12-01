@@ -45,6 +45,50 @@ let handleUserLogin = (ten_tk, mat_khau) => {
     })
 }
 
+let handleAdminLogin = (ten_tk, mat_khau) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let userData = {};
+            let isExist = await checkTenTK(ten_tk);
+            if (isExist) {
+                //user aready exist
+                let user = await db.Tai_Khoan.findOne({
+                    where: {
+                        ten_tk: ten_tk,
+                        role_id: 1 || 2
+                    },
+                    raw: true
+                });
+                if (user) {
+                    //compare password
+                    let check = bcrypt.compareSync(mat_khau, user.mat_khau);
+                    if (check) {
+                        userData.errCode = 0;
+                        userData.errMessage = 'Ok';
+                        delete user.mat_khau;
+                        userData.user = user;
+                    } else {
+                        userData.errCode = 3;
+                        userData.errMessage = 'Sai mật khẩu';
+                    }
+                } else {
+                    userData.errCode = 2;
+                    userData.errMessage = 'Không tìm thấy tên tài khoản';
+                }
+
+            } else {
+                //return error
+                userData.errCode = 1;
+                userData.errMessage = 'Tên tài khoản không tồn tại trong hệ thống!';
+
+            }
+            resolve(userData);
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 
 let checkTenTK = (userTentk) => {
     return new Promise(async (resolve, reject) => {
@@ -904,5 +948,6 @@ module.exports = {
     getAllMembershiptService: getAllMembershiptService,
     paymentVnpaySuccessService: paymentVnpaySuccessService,
     compareVoucherService: compareVoucherService,
-    minusQuantityService: minusQuantityService
+    minusQuantityService: minusQuantityService,
+    handleAdminLogin: handleAdminLogin
 }

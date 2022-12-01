@@ -22,6 +22,27 @@ let handleLogin = async (req, res) => {
     })
 }
 
+let handleLoginAdmin = async (req, res) => {
+    let ten_tk = req.body.ten_tk;
+    let mat_khau = req.body.mat_khau;
+
+    if (!ten_tk || !mat_khau) {
+        return res.status(500).json({
+            errCode: 1,
+            message: 'Bạn chưa nhập tên đăng nhập hoặc mật khẩu!'
+        })
+    }
+
+    let userData = await userServices.handleAdminLogin(ten_tk, mat_khau);
+
+    return res.status(200).json({
+        errCode: userData.errCode,
+        message: userData.errMessage,
+        user: userData.user ? userData.user : {}
+
+    })
+}
+
 let handleGetAllStaff = async (req, res) => {
     let id = req.query.id;
 
@@ -314,6 +335,7 @@ module.exports = {
     getAllMembership: getAllMembership,
     paymentVnpaySuccess: paymentVnpaySuccess,
     compareVoucher: compareVoucher,
-    minusQuantity: minusQuantity
+    minusQuantity: minusQuantity,
+    handleLoginAdmin: handleLoginAdmin
 
 }
