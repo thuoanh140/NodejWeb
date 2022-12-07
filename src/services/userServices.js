@@ -706,7 +706,8 @@ let getAllTicketService = () => {
                         model: db.ve_ban, as: 'ticketData', attributes: ['id_pttt', 'id_tv', 'id_km', 'ngay_ban', 'giam_gia_ve', 'trang_thai_ve'],
                         include:
                             [
-                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
+                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] },
+                                { model: db.thanh_vien, as: 'sdtData', attributes: ['sdt'] }
                             ]
                     },
                     {
