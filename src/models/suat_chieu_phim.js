@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
         suat_chieu_phim.belongsTo(models.rap, { foreignKey: 'theaterId', targetKey: 'id', as: 'theaterData' }),
         suat_chieu_phim.hasMany(models.ct_hd_ve, { foreignKey: 'id_suat_chieu', as: 'suatChieuId' }),
         suat_chieu_phim.belongsTo(models.Phim, { foreignKey: 'movieId', targetKey: 'id', as: 'movieData' })
+      // suat_chieu_phim.belongsTo(models.phong_chieu, { foreignKey: 'cinemaRoomId', targetKey: 'id', as: 'cinemaRoomData' })
     }
   }
   suat_chieu_phim.init({

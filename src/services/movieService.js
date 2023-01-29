@@ -1303,6 +1303,44 @@ let getTicketUnpaidByIdTVService = (id_tv) => {
     })
 }
 
+let getTicketUnPaidService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.ve_ban.findAll({
+                where: { trang_thai_ve: null },
+
+            })
+
+            if (!data) data = [];
+            resolve({
+                errCode: 0,
+                data: data
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let getBillFoodUnPaidService = () => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let data = await db.hoa_don_thuc_an.findAll({
+                where: { trang_thai_hd: null },
+
+            })
+
+            if (!data) data = [];
+            resolve({
+                errCode: 0,
+                data: data
+            })
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let getIdSeatByIdShowtimeService = (idShowtime) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -1344,21 +1382,76 @@ let getDetailTicketByIdTicketService = (id) => {
                     where: { id: id },
                     include: [
                         {
-                            model: db.ve_ban, as: 'ticketData', attributes: ['ngay_ban'],
+                            model: db.ve_ban, as: 'ticketData', attributes: ['ngay_ban', 'id_tv'],
                             include: [
-                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] }
+                                { model: db.pt_thanhtoan, as: 'paymentData', attributes: ['ten_pttt'] },
+                                { model: db.thanh_vien, as: 'sdtData', attributes: ['sdt'] }
                             ]
                         },
-                        { model: db.ghe, as: 'seatId', attributes: ['ten_ghe'] },
+                        {
+                            model: db.ghe, as: 'seatId', attributes: ['ten_ghe'],
+                            include: [
+                                { model: db.phong_chieu, as: 'cinemaRoomData', attributes: ['so_phong'] }
+                            ]
+                        },
                         {
                             model: db.suat_chieu_phim, as: 'suatChieuId', attributes: ['movieId', 'showTime'],
 
                             include: [
                                 { model: db.Phim, as: 'movieData', attributes: ['ten_phim'] },
-                                { model: db.rap, as: 'theaterData', attributes: ['ten_rap'] }
+                                { model: db.rap, as: 'theaterData', attributes: ['ten_rap'] },
+
                             ]
 
                         },
+                    ],
+                    raw: false,
+                    nest: true
+                    // raw: false
+                })
+
+                if (!data) data = [];
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+
+let getDetailBillFoodByIdBillFoodService = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Thiếu các tham số bắt buộc'
+                })
+            } else {
+                let data = await db.cthd_thucan.findAll({
+                    where: { id: id },
+                    include: [
+                        {
+                            model: db.hoa_don_thuc_an, as: 'hoadonId', attributes: ['ngay_ban', 'id_rap', 'id_tv'],
+
+                            include: [
+                                { model: db.thanh_vien, as: 'sdtFood', attributes: ['sdt'] },
+
+                            ]
+
+
+                        },
+                        {
+                            model: db.thuc_an, as: 'foodData', attributes: ['ten_ta'],
+
+                        },
+
+
                     ],
                     raw: false,
                     nest: true
@@ -1676,5 +1769,8 @@ module.exports = {
     getRevenueTheatereService: getRevenueTheatereService,
     getRevenueTheaterByDateService: getRevenueTheaterByDateService,
     getRevenueFoodByTheaterService: getRevenueFoodByTheaterService,
-    getRevenueFoodTheaterByDateService: getRevenueFoodTheaterByDateService
+    getRevenueFoodTheaterByDateService: getRevenueFoodTheaterByDateService,
+    getTicketUnPaidService: getTicketUnPaidService,
+    getBillFoodUnPaidService: getBillFoodUnPaidService,
+    getDetailBillFoodByIdBillFoodService: getDetailBillFoodByIdBillFoodService
 }

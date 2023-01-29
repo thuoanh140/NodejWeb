@@ -26,6 +26,9 @@ let initWebRoutes = (app) => {
     router.put('/api/edit-member', userController.handleEditMember);
     // router.put('/api/edit-ticket', userController.handleEditS);
     router.put('/api/cancel-ticket', userController.handleCancelTicket);
+    // router.delete('/api/delete-ticket', userController.handleDeleteTicket);
+    router.put('/api/confirm-ticket', userController.handleConfirmTicket);
+    router.put('/api/confirm-bill-food', userController.handleConfirmBillFood);
     router.put('/api/minus-quantity', userController.minusQuantity);
     router.put('/api/payment-vnpay-success', userController.paymentVnpaySuccess);
     router.delete('/api/delete-staff', userController.handleDeleteStaff);
@@ -87,6 +90,9 @@ let initWebRoutes = (app) => {
     router.get('/api/get-revenue-food-by-date', movieController.getRevenueFoodByDate);
     router.get('/api/get-seat-by-cinemaRoomId', movieController.getSeatByCinemaRoomId);
     router.get('/api/get-seat-by-cinemaRoomIdVIP', movieController.getSeatByCinemaRoomIdVIP);
+    router.get('/api/get-ticket-unpaid', movieController.getTicketUnPaid);
+    router.get('/api/get-bill-food-unpaid', movieController.getBillFoodUnPaid);
+    router.get('/api/get-DetailBillFood-by-IdBillFood', movieController.getDetailBillFoodByIdBillFood);
 
     return app.use("/", router);
 }

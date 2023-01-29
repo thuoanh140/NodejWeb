@@ -541,6 +541,78 @@ let cancelTicket = (id) => {
     })
 }
 
+let ConfirmTicket = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Thiếu các tham số bắt buộc!'
+                })
+            }
+            let ticketCancel = await db.ve_ban.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (ticketCancel) {
+                ticketCancel.trang_thai_ve = true;
+                await ticketCancel.save();
+
+                resolve({
+                    errCode: 0,
+                    message: 'Cập nhật thành công'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy vé!'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
+let ConfirmBillFood = (id) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!id) {
+                resolve({
+                    errCode: 2,
+                    errMessage: 'Thiếu các tham số bắt buộc!'
+                })
+            }
+            let ticketCancel = await db.hoa_don_thuc_an.findOne({
+                where: { id: id },
+                raw: false
+
+            })
+            if (ticketCancel) {
+                ticketCancel.trang_thai_hd = true;
+                await ticketCancel.save();
+
+                resolve({
+                    errCode: 0,
+                    message: 'Cập nhật thành công'
+                })
+            }
+            else {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Không tìm thấy hóa đơn!'
+                })
+            }
+
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
+
 let minusQuantityService = (id) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -950,5 +1022,7 @@ module.exports = {
     paymentVnpaySuccessService: paymentVnpaySuccessService,
     compareVoucherService: compareVoucherService,
     minusQuantityService: minusQuantityService,
-    handleAdminLogin: handleAdminLogin
+    handleAdminLogin: handleAdminLogin,
+    ConfirmTicket: ConfirmTicket,
+    ConfirmBillFood: ConfirmBillFood
 }

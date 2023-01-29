@@ -120,6 +120,18 @@ let handleCancelTicket = async (req, res) => {
     return res.status(200).json(message)
 }
 
+let handleConfirmTicket = async (req, res) => {
+    // let data = req.body.id;
+    let message = await userServices.ConfirmTicket(req.query.id);
+    return res.status(200).json(message)
+}
+
+let handleConfirmBillFood = async (req, res) => {
+    // let data = req.body.id;
+    let message = await userServices.ConfirmBillFood(req.query.id);
+    return res.status(200).json(message)
+}
+
 
 let minusQuantity = async (req, res) => {
     // let data = req.body.id;
@@ -336,6 +348,8 @@ module.exports = {
     paymentVnpaySuccess: paymentVnpaySuccess,
     compareVoucher: compareVoucher,
     minusQuantity: minusQuantity,
-    handleLoginAdmin: handleLoginAdmin
+    handleLoginAdmin: handleLoginAdmin,
+    handleConfirmTicket: handleConfirmTicket,
+    handleConfirmBillFood: handleConfirmBillFood
 
 }

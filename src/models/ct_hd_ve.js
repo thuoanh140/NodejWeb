@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       ct_hd_ve.belongsTo(models.ghe, { foreignKey: 'id_ghe', targetKey: 'id', as: 'seatId' }),
         ct_hd_ve.belongsTo(models.suat_chieu_phim, { foreignKey: 'id_suat_chieu', targetKey: 'id', as: 'suatChieuId' }),
         ct_hd_ve.belongsTo(models.ve_ban, { foreignKey: 'id', targetKey: 'id', as: 'ticketData' })
+
     }
   }
   ct_hd_ve.init({

@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       phong_chieu.hasMany(models.ghe, { foreignKey: 'id_phong_chieu', as: 'cinemaRoomData' }),
         phong_chieu.belongsTo(models.rap, { foreignKey: 'rapId', targetKey: 'id', as: 'rapData' })
+      // phong_chieu.hasMany(models.suat_chieu_phim, { foreignKey: 'cinemaRoomId', as: 'cinemaRoomData' }),
     }
   }
   phong_chieu.init({

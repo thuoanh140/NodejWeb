@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       hoa_don_thuc_an.hasMany(models.cthd_thucan, { foreignKey: 'id', as: 'hoadonId' }),
-        hoa_don_thuc_an.belongsTo(models.rap, { foreignKey: 'id_rap', targetKey: 'id', as: 'billData' })
+        hoa_don_thuc_an.belongsTo(models.rap, { foreignKey: 'id_rap', targetKey: 'id', as: 'billData' }),
+        hoa_don_thuc_an.belongsTo(models.thanh_vien, { foreignKey: 'id_tv', targetKey: 'id', as: 'sdtFood' })
     }
   }
   hoa_don_thuc_an.init({

@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      thuc_an.hasMany(models.cthd_thucan, { foreignKey: 'id_ta', as: 'foodData' })
     }
   }
   thuc_an.init({
